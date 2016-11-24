@@ -12,5 +12,12 @@
 		"mem": "18G",
 		"out": "data/log/create_snps-%j.out",
 		"err": "data/log/create_snps-%j.err"
-	}
+	},
+	"clean_summary_statistics":
+	{
+		"time" : "12:00:00",
+    "mem": "35G",
+		"out": "data/log/clean_summary_statistics-%j.out",
+		"err": "data/log/clean_summary_statistics-%j.err"
+  }
 }
