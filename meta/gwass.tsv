@@ -1,0 +1,17 @@
+consortium	trait	full_trait_name	summary_statistics_link	summary_statistics_path	n_individuals
+pgc	scz	schizophrenia	https://www.med.unc.edu/pgc/files/resultfiles/scz2.snp.results.txt.gz	data/raw_summary_statistics/scz2.snp.results.txt.gz	70100
+pgc	bip	biploar	https://www.med.unc.edu/pgc/files/resultfiles/pgc.bip.2012-04.zip	data/raw_summary_statistics/pgc.bip.full.2012-04.txt	NA
+pgc	mdd	major_depressive_disorder	https://www.med.unc.edu/pgc/files/resultfiles/pgc.mdd.2012-04.zip	data/raw_summary_statistics/pgc.mdd.full.2012-04.txt	NA
+angst	anx	anxiety	https://www.med.unc.edu/pgc/files/resultfiles/angst.study.results.zip	data/raw_summary_statistics/anxiety.meta.full.cc.tbl.gz	NA
+giant	height	height	http://portals.broadinstitute.org/collaboration/giant/images/0/01/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.txt.gz	data/raw_summary_statistics/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.txt.gz	NA
+pgc	an	anorexia_nervosa	https://www.med.unc.edu/pgc/files/resultfiles/angst.study.results.zip	data/raw_summary_statistics/pgc.an.snp.all.13May2016.txt	NA
+pgc	as	autism_spectrum_disorder	https://www.med.unc.edu/pgc/files/resultfiles/pgcasdeuro.gz	data/raw_summary_statistics/pgcasdeuro.gz	NA
+gefos	fa	fore_arm_bone_density	http://www.gefos.org/sites/default/files/fa2stu.MAF0_.005.pos_.out_.gz	data/raw_summary_statistics/fa2stu.MAF0_.005.pos_.out_.gz	NA
+gefos	fn	femoral_neck_bone_density	http://www.gefos.org/sites/default/files/fn2stu.MAF0_.005.pos_.out_.gz	data/raw_summary_statistics/fn2stu.MAF0_.005.pos_.out_.gz	NA
+gefos	ls	lumbar_spine_bone_density	http://www.gefos.org/sites/default/files/ls2stu.MAF0_.005.pos_.out_.gz	data/raw_summary_statistics/ls2stu.MAF0_.005.pos_.out_.gz	NA
+reprogen	aam	age_at_menarche	http://www.reprogen.org/Menopause_HapMap2_DayNG2015_18112015.txt.gz	data/raw_summary_statistics/Menopause_HapMap2_DayNG2015_18112015.txt.gz	127884
+giant	bmi	body_mass_index	http://portals.broadinstitute.org/collaboration/giant/images/1/15/SNP_gwas_mc_merge_nogc.tbl.uniq.gz	data/raw_summary_statistics/SNP_gwas_mc_merge_nogc.tbl.uniq.gz	NA
+ibdgenetics	cd	crohns_disease	ftp://ftp.sanger.ac.uk/pub/consortia/ibdgenetics/iibdgc-trans-ancestry-filtered-summary-stats.tgz	data/raw_summary_statistics/EUR.CD.gwas_info03_filtered.assoc	NA
+ibdgenetics	ibd	irritable_bowel_disease	ftp://ftp.sanger.ac.uk/pub/consortia/ibdgenetics/iibdgc-trans-ancestry-filtered-summary-stats.tgz	data/raw_summary_statistics/EUR.IBD.gwas_info03_filtered.assoc	NA
+ibdgenetics	uc	ulcerative_colitis	ftp://ftp.sanger.ac.uk/pub/consortia/ibdgenetics/iibdgc-trans-ancestry-filtered-summary-stats.tgz	data/raw_summary_statistics/EUR.UC.gwas_info03_filtered.assoc	NA
+magic	fg	fasting_glucose	ftp://ftp.sanger.ac.uk/pub/magic/MAGIC_FastingGlucose.txt	data/raw_summary_statistics/MAGIC_FastingGlucose.txt	NA
