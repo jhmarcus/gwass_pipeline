@@ -6,6 +6,8 @@ import sys
 import os
 import numpy as np
 import pandas as pd
+sys.path.append('../gwass')
+import gwass
 
 configfile: 'config.yaml'
 summary_statistics_df = pd.read_table('meta/gwass.tsv', index_col=False)
@@ -17,8 +19,8 @@ for i, row in summary_statistics_df.iterrows():
 
 rule all:
     input:
-        snps,
-        summary_statistics
+        snps
+#        summary_statistics
 
 rule create_snps:
     ''' '''
@@ -28,7 +30,7 @@ rule create_snps:
     output:
         snps
     run:
-        shell('python scripts/create_snps.py --sites {input.sites_vcf} --ref {input.ref_genome} | gzip -c > {output}')
+        shell('create-snps --sites {input.sites_vcf} --ref {input.ref_genome} | gzip -c > {output}')
 
 rule clean_summary_statistics:
     '''
@@ -41,4 +43,4 @@ rule clean_summary_statistics:
         output = 'data/summary_statistics/{consortium}_{trait}_summary_statistics'
     output: 'data/summary_statistics/{consortium}_{trait}_summary_statistics.tsv.gz'
     run:
-        shell('python scripts/clean_summary_statistics.py --summary_statistics {input.summary_statistics} --snps {input.snps} --out {params.output}') 
+        shell('clean-summary-statistics --summary_statistics {input.summary_statistics} --snps {input.snps} --out {params.output}') 

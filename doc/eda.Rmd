@@ -1,0 +1,64 @@
+---
+title: "eda"
+author: "Joseph Marcus"
+date: "11/25/2016"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+setwd("/home/jhmarcus/novembre_lab/jhmarcus/gwass_pipeline")
+
+# read summary statistics
+df <- read.table("data/summary_statistics/giant_height_summary_statistics.tsv.gz", 
+                 header=TRUE, stringsAsFactors=FALSE, sep="\t") 
+
+# mutational context
+mut_df <- df %>% mutate(sign = ifelse(beta_hat > 0, "+", "-")) %>% 
+          filter(allele_type == "derived_ancestral") %>%
+          mutate(mut = paste0(other_allele, "->", effect_allele)) %>%
+          mutate(mut_3mer = paste0(ref_base_l1, other_allele, "->", effect_allele, ref_base_r1)) %>%
+          mutate(mut_5mer = paste0(ref_base_l2, ref_base_l1, other_allele, "->", 
+                                   effect_allele, ref_base_r1, ref_base_r2)) 
+
+# moments df
+mut_3mer_mom_df <- mut_df %>% group_by(mut_3mer) %>% 
+                   summarise(mean_z=mean(beta_hat/se),
+                             sd_z=sd(beta_hat/se),
+                             skew_z=moments::skewness(beta_hat/se), 
+                             mean_beta_hat=mean(beta_hat),
+                             skew_beta_hat=moments::skewness(beta_hat),
+                             sd_beta_hat=sd(beta_hat)) %>%
+                   arrange(desc(sd_beta_hat))
+
+mut_5mer_mom_df <- mut_df %>% group_by(mut_5mer) %>% 
+                   summarise(mean_z=mean(beta_hat/se),
+                             sd_z=sd(beta_hat/se),
+                             skew_z=moments::skewness(beta_hat/se), 
+                             mean_beta_hat=mean(beta_hat),
+                             skew_beta_hat=moments::skewness(beta_hat),
+                             sd_beta_hat=sd(beta_hat)) %>%
+                   arrange(desc(sd_beta_hat))
+
+#skew_df$mut_context <- factor(skew_df$mut_context, levels = skew_df$mut_context[order(skew_df$skew_z)])
+
+# sfs vs sign
+p <- ggplot(mut_5mer_mom_df, aes(x=f_eur, fill=sign)) + geom_density() + facet_wrap(~mut)
+p
+
+# skew plot
+p <- ggplot(mom_df, aes(x=mean_z, y=skew_z, label=mut_cont_3mer)) + geom_text()
+p
+
+kmer <- "GA->CC"
+kmer_df <- mut_df %>% filter(mut_cont_3mer == kmer)
+p <- ggplot(mut_df, aes(x=beta_hat/se)) + geom_histogram()
+p
+
+# sfs vs sign
+p <- ggplot(kmer_df, aes(x=f_eur, fill=sign)) + geom_density(alpha=.5) 
+p
+```
+
+
