@@ -1,0 +1,105 @@
+---
+title: "Height EDA"
+author: "Joseph Marcus"
+date: "11/25/2016"
+output: html_document
+---
+
+## Imports
+
+```{r imports, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(moments)
+```
+
+Here are some explortory analysis of gwas effects and allele frequencies where the sign of the effect is oriented to the derived allele (note if ancestral allele annontations is note availiable for a SNP I default to the globally minor allele). Specifically I downloaded human hieght gwas summary statisitcs of from the GIANT constorium. Our data consistents of about 2M SNPs. I applied `ash` to these summmary statistics and explore the relationship between effect sign, allele frequency and mutational context.
+
+## Prepare data
+
+Here I add to the df of summary statistics and ash results allele frequencies of derived alleles in the 1KG superpopulations (i.e. `f_sas, f_afr, f_eas, f_eur, f_amr`) as well as flanking reference genome bases one and two positions to the left and right of the snp (i.e. `ref_base_l2, ref_base_l1, ref_base_r1, ref_base_r2`). A string version of full 3mer and 5mer are in the `snp_mut_3mer, snp_mut_5mer` columns.
+
+```{r read_data}
+# read summary statistics and add mutation columns
+df <- readRDS(file = "../data/ash/giant_height_ash_df.rds") %>%
+      mutate(sign = ifelse(beta_hat > 0, "+", "-")) %>% 
+      mutate(snp_mut=paste0(other_allele, "->", effect_allele)) %>%
+      mutate(snp_mut_3mer = paste0(ref_base_l1, other_allele, "->", effect_allele, ref_base_r1)) %>%
+      mutate(snp_mut_5mer = paste0(ref_base_l2, ref_base_l1, other_allele, "->", effect_allele, ref_base_r1, ref_base_r2)) %>%
+      mutate(f_eur_tile = ntile(f_eur, 25))
+
+head(df)
+dim(df)
+print(colnames(df))
+```
+
+## Allele frequency spectrum (AFS)
+
+### Derived AFS and global minor AFS
+
+When the the ancestral allele cannot be determined I default the effect allele as the globally minor allele. Recall the ascertainment of the array snps. As expected we see an enrichment of rare alelles. Not sure about the AFS shape of the globally minor allele. It seems wierd that the is a large hump at .25. Note that the is showing the frequency of the derived allele and globally minor allele in europeans.
+
+```{r afs}
+p <- ggplot(df, aes(x=f_eur)) + 
+     geom_histogram() + 
+     facet_grid(allele_type ~ ., scales = "free") + 
+     theme_bw() 
+p
+```
+
+### Dervied AFS vs effect sign
+
+As observed previously we observe an enrichment of negative effect SNPs in the rare side of the frequency spectrum (the community has invoked selection to explain this observation). 
+
+```{r afs_sign}
+p <- ggplot(df %>% filter(allele_type == "derived_ancestral"), aes(x=f_eur, fill=sign)) + 
+     geom_density(alpha=.5) + 
+     theme_bw() 
+p
+```
+
+*Need to figure out a better visualization for posterior signs*
+
+```{r afs_sign_ash}
+gath_ash_sign_df <- df %>% filter(allele_type == "derived_ancestral") %>% 
+                    select(snp, f_eur_tile, NegativeProb, PositiveProb, lfdr) %>% 
+                    gather(sign, prob, -snp, -f_eur_tile)
+
+p <- ggplot(gath_ash_sign_df, aes(x=factor(f_eur_tile), y=prob, fill=sign)) + 
+     geom_boxplot() + 
+     theme_bw() + facet_grid(~sign)
+p
+```
+
+Note I filter out strand ambigous SNPs so that is why we are missing A/T and G/C mutations. 
+
+```{r mut_sfs_sign}
+p <- ggplot(df %>% filter(allele_type=="derived_ancestral"), aes(x=f_eur, fill=sign)) + 
+     geom_density(alpha=.5) + 
+     facet_wrap(~snp_mut, scales = "free") +
+     theme_bw() 
+p
+```
+
+## Mutation types vs effects
+
+### 3mer effect size distributions
+
+```{r 3mer_ash_effects}
+p <- ggplot(df, aes(x=snp_mut_3mer, y=PosteriorMean, fill=paste0(ref_base_l1, ref_base_r1))) + 
+     geom_violin() + 
+     facet_wrap(~snp_mut,scales = "free") + 
+     theme_bw() +
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+     guides(fill=FALSE) 
+p
+```
+
+### 5mer effect size distributions
+
+```{r 5mer_ash_effects}
+x <- df %>% filter(snp_mut_3mer == "TG->AT")
+
+```

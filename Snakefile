@@ -19,8 +19,8 @@ for i, row in summary_statistics_df.iterrows():
 
 rule all:
     input:
-        snps
-#        summary_statistics
+        snps,
+        summary_statistics
 
 rule create_snps:
     ''' '''

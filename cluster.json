@@ -15,7 +15,7 @@
 	},
 	"clean_summary_statistics":
 	{
-		"time" : "12:00:00",
+		"time" : "7:00:00",
     "mem": "60G",
 		"out": "data/log/clean_summary_statistics-%j.out",
 		"err": "data/log/clean_summary_statistics-%j.err"
